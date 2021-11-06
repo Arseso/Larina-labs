@@ -18,10 +18,10 @@ int main(void) {
         if (max_h>0 && max_h<max_len) 
         {
             if(
-                !(A = (float**)malloc(sizeof(float)*max_h))||
-                !(AB = (float**)malloc(sizeof(float)*max_h))||
-                !(BE = (float**)malloc(sizeof(float)*max_h))||
-                !(B = (float**)malloc(sizeof(float)*max_h))
+                !(A = (float**)malloc(sizeof(float*)*max_h))||
+                !(AB = (float**)malloc(sizeof(float*)*max_h))||
+                !(BE = (float**)malloc(sizeof(float*)*max_h))||
+                !(B = (float**)malloc(sizeof(float*)*max_h))
             ){printf("NullPointerException"); return 0;}
             for (i = 0; i < max_h; i++) {
                 if(
