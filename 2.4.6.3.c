@@ -17,17 +17,19 @@ int main(void) {
         scanf("%d",&max_h);
         if (max_h>0 && max_h<max_len) 
         {
-            A = (float**)malloc(sizeof(float)*max_h);
-            AB = (float**)malloc(sizeof(float)*max_h);
-            BE = (float**)malloc(sizeof(float)*max_h);
-            B = (float**)malloc(sizeof(float)*max_h);
+            if(
+                !(A = (float**)malloc(sizeof(float)*max_h))||
+                !(AB = (float**)malloc(sizeof(float)*max_h))||
+                !(BE = (float**)malloc(sizeof(float)*max_h))||
+                !(B = (float**)malloc(sizeof(float)*max_h))
+            ){printf("NullPointerException"); return 0;}
             for (i = 0; i < max_h; i++) {
-                A[i] = (float*) malloc(max_h * sizeof(float));
-                AB[i] = (float*) malloc(max_h * sizeof(float));
-                BE[i] = (float*) malloc(max_h * sizeof(float));
-                B[i] = (float*) malloc(max_h * sizeof(float));
-
-                if(A == NULL || B == NULL || AB == NULL || BE == NULL){printf("NullPointerException, program stoped"); return 0;}
+                if(
+                    !(A[i] = (float*)malloc(sizeof(float)*max_h))||
+                    !(AB[i] = (float*)malloc(sizeof(float)*max_h))||
+                    !(BE[i] = (float*)malloc(sizeof(float)*max_h))||
+                    !(B[i] = (float*)malloc(sizeof(float)*max_h))
+                ){printf("NullPointerException"); return 0;}
                 }
         } else {
             printf("\n INCORRECT N, PROGRAM STOPED");
