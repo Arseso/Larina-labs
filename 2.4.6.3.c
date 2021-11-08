@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <malloc.h>
+#include <math.h>
 #define max_len 21
 
 
 
 int main(void) {
     int i,j,g;
-    float **A, **B, **AB;
-    int max_h;
-    int temp, error;
+    float **A, **B, **AB, temp, average;
+    int max_h, aver_index;
+    int error;
 
 
 
@@ -33,6 +34,7 @@ int main(void) {
             printf("\n INCORRECT N, PROGRAM STOPED");
             return 0;
         }
+        
 
     //init A
 
@@ -43,6 +45,14 @@ int main(void) {
         if (error==0){printf("INCORRECT SYMBOL. PROGRAM STOPED"); return 0;}
       }
     }
+    
+    
+    
+    if(max_h%2!=0){
+        aver_index=max_h/2;
+        average=A[aver_index][aver_index];
+    }
+    
 
 
     //display matrix A
@@ -54,6 +64,8 @@ int main(void) {
         printf("\n");
     }
     printf("\n");
+    
+    
 
     //rotate
     for (i = 0; i < max_h / 2; i++) {
@@ -64,6 +76,10 @@ int main(void) {
         B[max_h-i-1][max_h-j-1]=A[j][max_h-i-1];
         B[j][max_h-i-1]=temp;
         }
+    }
+    
+    if(max_h%2!=0){
+        B[aver_index][aver_index]=average;
     }
 
 
@@ -90,15 +106,23 @@ int main(void) {
         for (j = 0; j< max_h; j++) {
             AB[i][j]=0;
             for (g = 0; g < max_h; g++) {
-        		if((g==j)){
-                    AB[i][j] += A[i][g] * (B[g][j]+1);
-        		} else {
-        			AB[i][j] += A[i][g] * B[g][j];
-        		}
+        	if((g==j)){
+                    	AB[i][j] += A[i][g] * (B[g][j]+1);
+        	} else {
+        		AB[i][j] += A[i][g] * B[g][j];
+        	}
             }
         }
     }
     
+    printf("C:\n");
+    for (i = 0; i < max_h; i++) {
+        for (j = 0; j < max_h; j++)
+            printf("%f ", AB[i][j]);
+ 
+        printf("\n");
+    }
+    printf("\n");
 
     //AB+E
 
