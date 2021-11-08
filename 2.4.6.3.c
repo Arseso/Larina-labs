@@ -6,7 +6,7 @@
 
 int main(void) {
     int i,j,g;
-    float **A, **B, **AB, **BE;
+    float **A, **B, **AB;
     int max_h;
     int temp, error;
 
@@ -14,20 +14,18 @@ int main(void) {
 
     //init N
     printf("\n I NEED YOUR N (0<N<=%d): ", max_len-1);
-        scanf("%d",&max_h);
-        if (max_h>0 && max_h<max_len) 
+        error = scanf("%d",&max_h);
+        if (error!=0 && max_h>0 && max_h<max_len) 
         {
             if(
                 !(A = (float**)malloc(sizeof(float*)*max_h))||
                 !(AB = (float**)malloc(sizeof(float*)*max_h))||
-                !(BE = (float**)malloc(sizeof(float*)*max_h))||
                 !(B = (float**)malloc(sizeof(float*)*max_h))
             ){printf("NullPointerException"); return 0;}
             for (i = 0; i < max_h; i++) {
                 if(
                     !(A[i] = (float*)malloc(sizeof(float)*max_h))||
                     !(AB[i] = (float*)malloc(sizeof(float)*max_h))||
-                    !(BE[i] = (float*)malloc(sizeof(float)*max_h))||
                     !(B[i] = (float*)malloc(sizeof(float)*max_h))
                 ){printf("NullPointerException"); return 0;}
                 }
@@ -47,11 +45,11 @@ int main(void) {
     }
 
 
-    //display the matrix A
+    //display matrix A
     printf("A:\n");
-    for (int i = 0; i < max_h; i++) {
-        for (int j = 0; j < max_h; j++)
-            printf("%2f ", A[i][j]);
+    for (i = 0; i < max_h; i++) {
+        for (j = 0; j < max_h; j++)
+            printf("%f ", A[i][j]);
  
         printf("\n");
     }
@@ -69,11 +67,11 @@ int main(void) {
     }
 
 
-    //display the matrix B
+    //display matrix B
     printf("B:\n");
-    for (int i = 0; i < max_h; i++) {
-        for (int j = 0; j < max_h; j++)
-            printf("%2f ", B[i][j]);
+    for (i = 0; i < max_h; i++) {
+        for (j = 0; j < max_h; j++)
+            printf("%f ", B[i][j]);
  
         printf("\n");
     }
@@ -86,27 +84,21 @@ int main(void) {
     //
     //
 
-    //B+E (matrix BE)
-
-    for(i=0; i<max_h; i++){
-          for(j=0; j<max_h; j++){
-            if(i==j){
-              BE[i][j]+=B[i][j]+1;
-            } else {
-              BE[i][j]+=B[i][j];
-            }
-          }
-        }
-    
-    //A*BE (matrix AB)
+    //A*(B+E) (matrix AB)
 
     for (i = 0; i < max_h; i++) {
         for (j = 0; j< max_h; j++) {
+            AB[i][j]=0;
             for (g = 0; g < max_h; g++) {
-                AB[i][j] += A[i][g] * BE[g][j];
+        		if((g==j)){
+                    AB[i][j] += A[i][g] * (B[g][j]+1);
+        		} else {
+        			AB[i][j] += A[i][g] * B[g][j];
+        		}
             }
         }
     }
+    
 
     //AB+E
 
@@ -120,11 +112,11 @@ int main(void) {
 
     
 
-    //display the matrix C
+    //display matrix C
     printf("C:\n");
-    for (int i = 0; i < max_h; i++) {
-        for (int j = 0; j < max_h; j++)
-            printf("%2f ", AB[i][j]);
+    for (i = 0; i < max_h; i++) {
+        for (j = 0; j < max_h; j++)
+            printf("%f ", AB[i][j]);
  
         printf("\n");
     }
