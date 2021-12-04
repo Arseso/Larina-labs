@@ -1,13 +1,9 @@
 #include <stdio.h>
 #include <malloc.h>
+#include <stdlib.h>
 
 
-struct list
-{
-  int field; // поле данных
-  struct list *next; // указатель на следующий элемент
-  struct list *prev; // указатель на предыдущий элемент
-};
+
 
 typedef struct _Node {
     int value;
@@ -24,7 +20,8 @@ typedef struct _DblLinkedList {
 //init list
 
 DblLinkedList* initDblLinkedList() {
-    DblLinkedList *tmp = (DblLinkedList*) malloc(sizeof(DblLinkedList));
+  DblLinkedList *tmp;
+    if(!(tmp = (DblLinkedList*) malloc(sizeof(DblLinkedList)))){printf("NullPoiterException");}
     tmp->size = 0;
     tmp->head = tmp->tail = NULL;
  
@@ -35,7 +32,7 @@ DblLinkedList* initDblLinkedList() {
 
 
 //sortirovka
-void sort(Node *start)
+Node* sort(Node *start) 
 {
     Node *tmp;
     Node *a;
@@ -59,12 +56,14 @@ void sort(Node *start)
             a=a->next;
         }
     }
+    return start;
 }
 
 
 //add to list
-void pushBack(DblLinkedList *list, int value) {
-    Node *tmp = (Node*) malloc(sizeof(Node));
+DblLinkedList* pushBack(DblLinkedList *list, int value) { 
+  Node *tmp;
+    if(!(tmp = (Node*) malloc(sizeof(Node)))){printf("NullPoiterException");}
     if (tmp == NULL) {
         return 0;
     }
@@ -80,7 +79,9 @@ void pushBack(DblLinkedList *list, int value) {
         list->head = tmp;
     }
     list->size++;
+    return list;
 }
+
 
 //print list
 void listprint(DblLinkedList *lst)
@@ -93,42 +94,87 @@ void listprint(DblLinkedList *lst)
   } while (p != NULL); // условие окончания обхода
 }
 
+DblLinkedList* del(DblLinkedList *list, int index) {
+    Node *elm = NULL;
+    int i;
+    elm = list->head;
+    for(i=0;i<index;i++){
+      elm = elm->next;
+    }
+    if (elm->prev != NULL) {
+        elm->prev->next = elm->next;
+    }
+    if (elm->next != NULL) {
+        elm->next->prev = elm->prev;
+    }
+ 
+    if (elm->prev == NULL) {
+        elm->prev = NULL;
+        list->head = elm->next;
+        return list;
+    }
+    while(elm->prev != NULL){elm = elm->prev;}
+    list->head = elm;
 
+ 
+    list->size--;
+ 
+    return list;
+}
 
 
 int main()
 {
-    int num, error, error1, K,L;
+    int num, error, error1, K,L,i;
+    Node* tmp = NULL;
     DblLinkedList *list = initDblLinkedList();
-    
-    
-    printf("Введите число K: ");
-        error = scanf("%d", &K);
-    printf("Введите число L: ");
-        error1 = scanf("%d", &L);
-        if(error==0 || error1==0 || K>=L){
-            printf("Данные введены некорректно");
-            return 0;
-        }
     
     while(1){
         printf("Введите число для записи в списке (для завершения ввода введите любой символ, отличный от чисел): ");
         error = scanf("%d", &num);
-        if(error!=0){
-            if(num>K && num<L){
-                continue;
-            }
-            pushBack(list, num);
-            
+        if(error!=0 && getchar()){
+            list = pushBack(list, num);
         } else {
-            break;
+          getchar();
+          break;
         }
+
+        
     }
     
     
-    printf("Результат: ");
-    sort(list->head);
+    printf("Отсортированный cписок: \n");
+    list->head = sort(list->head);
     listprint(list);
-    
+    getchar();
+    printf("\nВведите число K: ");
+    error = scanf("%d", &K);
+    if(error==0){
+        printf("\nДанные введены некорректно");
+        return 0;
+    }
+    printf("\nВведите число L: ");
+    error1 = scanf("%d", &L);
+    if(error1==0 || K>=L){
+        printf("\nДанные введены некорректно");
+        return 0;
+    }
+
+  tmp = list->head;
+  i=0;
+  while(tmp){
+    if(tmp->value > K && tmp->value < L){
+
+          list = del(list, i);
+    } else {i++;}
+    tmp = tmp->next;
+
+  }
+  printf("Результат: \n");
+  if(list->head==NULL){
+    printf("В результате работы программы чисел в списке не осталось.");
+  } else {listprint(list);}
+    free(list);
     return 0;
+
 }
