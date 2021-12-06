@@ -1,0 +1,126 @@
+#include <stdio.h>
+#include <malloc.h>
+#include <stdlib.h>
+
+
+typedef struct _Node {
+    int value;
+    struct _Node *next;
+    struct _Node *prev;
+} Node;
+
+typedef struct _DblLinkedList {
+    size_t size;
+    Node *head;
+    Node *tail;
+} DblLinkedList;
+
+//init list
+
+DblLinkedList* initDblLinkedList() {
+DblLinkedList *tmp;
+    if(!(tmp = (DblLinkedList*) malloc(sizeof(DblLinkedList)))){printf("NullPoiterException");}
+    tmp->size = 0;
+    tmp->head = tmp->tail = NULL;
+ 
+    return tmp;
+}
+
+DblLinkedList* swap(DblLinkedList *list, int len){
+  int i;
+  Node *first = list->head;
+  Node *tmp = list->head;
+
+  for(i=0;i<len;i++){
+    tmp=tmp->next;
+    first = first->next;
+  }
+  first = first->prev;
+  first->next = NULL;
+  tmp->prev=NULL;
+  while(first->prev!=NULL){first = first->prev;}
+  while(tmp->next!=NULL){tmp=tmp->next;}
+  tmp->next = first;
+  while(tmp->prev!=NULL){tmp = tmp->prev;}
+  list->head = tmp;
+  return list;
+}
+
+
+//add to list
+DblLinkedList* pushBack(DblLinkedList *list, int value) {
+    Node *tmp;
+	if(!(tmp = (Node*) malloc(sizeof(Node)))){printf("NullPoiterException");}
+    if (tmp == NULL) {
+        return 0;
+    }
+    tmp->value = value;
+    tmp->next = NULL;
+    tmp->prev = list->tail;
+    if (list->tail) {
+        list->tail->next = tmp;
+    }
+    list->tail = tmp;
+ 
+    if (list->head == NULL) {
+        list->head = tmp;
+    }
+    list->size++;
+    return list;
+}
+
+//print list
+void listprint(DblLinkedList *lst)
+{
+  struct _Node *p;
+  p = lst->head;
+  do {
+    printf("%d ", p->value); // вывод значения элемента p
+    p = p->next; // переход к следующему узлу
+  } while (p != NULL); // условие окончания обхода
+  printf("\n");
+}
+
+
+
+
+int main()
+{
+    int num, i, error, len;
+    DblLinkedList *list = initDblLinkedList();
+    Node *tmp = NULL;
+    
+    
+    while(1){
+        printf("Введите число для записи в списке (для завершения ввода введите любой символ, отличный от чисел): ");
+        error = scanf("%d", &num);
+        if(error!=0){
+            pushBack(list, num);
+            len++;
+            
+        } else {
+            break;
+        }
+    }
+    if (len==0){
+      printf("Для работы программы необходим хотя бы 1 элемент.");
+      return 0;
+    }
+    if (len==1){
+      printf("Результат: \n");
+      listprint(list);
+      return 0;
+    }
+    if(len%2==1){
+      len = (len/2)+1;
+    } else {
+      len = len/2;
+    }
+
+    list = swap(list, len);
+    printf("Результат: \n");
+    listprint(list);
+    free(list);
+    
+    return 0;
+}
