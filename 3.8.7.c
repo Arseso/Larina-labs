@@ -75,7 +75,7 @@ int main(void) {
     printf("Предложение введено неверно. Работа программы прекращена.");
     return 0;
   }
-
+ 
   del_spaces();
   
   if(is_palin(str)){
